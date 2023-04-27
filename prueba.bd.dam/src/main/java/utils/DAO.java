@@ -65,7 +65,17 @@ public abstract class DAO {
 			String clave=(String)it.next();
 			query+=clave+",";
 		}
+		
 		query=query.substring(0,query.length()-1)+") values (";
+		
+		Iterator itv =campos.values().iterator();
+		while(itv.hasNext()) {
+			String clave=(String)itv.next();
+			query+=clave+",";
+		}
+		
+		query=query.substring(0,query.length()-1)+") values (";
+		
 		if(Config.verboseMode) {
 			System.out.println(query);
 		}

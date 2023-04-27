@@ -1,6 +1,7 @@
 package prueba.bd.dam;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import utils.DAO;
@@ -25,7 +26,11 @@ public class Principal {
 					System.out.println("Dime nick");
 					String nick = sc.nextLine();
 
-					DAO.insert("insert into user values('" + email + "','" + pass + "','" + nick + "')");
+					HashMap<String, String>columnas=new HashMap<String,String>();
+					columnas.put("email", email);
+					columnas.put("pass", pass);
+					columnas.put("nick", nick);
+					DAO.insert("user ",columnas);
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
