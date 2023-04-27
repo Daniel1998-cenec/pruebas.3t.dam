@@ -10,7 +10,10 @@ public class Principal {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-
+		// Pon en el menu una opcion 5 - borrar mascota, y usa la funcion dlete de DAO
+		// que ya tenemos hecha para, pidiendo por teclado el nombre de la mascota
+		// y el email del dueño, te borre a la mascota de la tabla pets.
+		// Probadlo de forma que logreis dspues borrar a pueba@prueba.es
 		byte opcion = 0;
 		do {
 			System.out.println("¿Qué quieres hacer en la bd?\n\t0- Salir" + "\n\t1- Insertar usuario"
@@ -26,11 +29,11 @@ public class Principal {
 					System.out.println("Dime nick");
 					String nick = sc.nextLine();
 
-					HashMap<String, String>columnas=new HashMap<String,String>();
+					HashMap<String, String> columnas = new HashMap<String, String>();
 					columnas.put("email", email);
 					columnas.put("pass", pass);
 					columnas.put("nick", nick);
-					DAO.insert("user ",columnas);
+					DAO.insert("user ", columnas);
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -41,8 +44,12 @@ public class Principal {
 				try {
 					System.out.println("Dime el email del usuario que quieres borrar");
 					String email = sc.nextLine();
-					int filasBorradas=DAO.delete("delete from user where email='" + email + "'");
-					System.out.println("Se han borrado "+filasBorradas+" filas.");
+
+					HashMap<String, String> campos = new HashMap<String, String>();
+					campos.put("email", email);
+					int filasBorradas = DAO.delete("user", campos);
+
+					System.out.println("Se han borrado " + filasBorradas + " filas.");
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -53,6 +60,24 @@ public class Principal {
 				break;
 			case 4:
 
+				break;
+
+			case 5:
+				try {
+					System.out.println("Dime el nombre de la mascota que quieres borrar");
+					String nMascota = sc.nextLine();
+					System.out.println("Dime el email del dueño de la mascota que quieres borrar");
+					String email = sc.nextLine();
+					HashMap<String, String> campos = new HashMap<String, String>();
+					campos.put("name", nMascota);
+					campos.put("ownerEmail", email);
+					int filasBorradas = DAO.delete("pet", campos);
+
+					System.out.println("Se han borrado " + filasBorradas + " filas.");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				break;
 			}
 		} while (opcion != 0);

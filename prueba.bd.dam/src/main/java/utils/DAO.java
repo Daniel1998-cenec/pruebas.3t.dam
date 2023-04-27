@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
+
+
 
 /**
  * Clase de Acceso a Base de datos, abstracta, que permite
@@ -71,10 +74,10 @@ public abstract class DAO {
 		Iterator itv =campos.values().iterator();
 		while(itv.hasNext()) {
 			String clave=(String)itv.next();
-			query+=clave+",";
+			query+="'"+clave+"',";
 		}
 		
-		query=query.substring(0,query.length()-1)+") values (";
+		query=query.substring(0,query.length()-1)+")";
 		
 		if(Config.verboseMode) {
 			System.out.println(query);
@@ -84,8 +87,18 @@ public abstract class DAO {
 		return ret;
 	}
 	
-	public static int delete(String query) throws SQLException{
+	public static int delete(String table, HashMap<String,String>campos) throws SQLException{
 		Statement querier=connect();
+		
+		String query="delete from "+table+" where ";
+		Iterator it=campos.entrySet().iterator();
+		while(it.hasNext()) {
+			Entry actual=(Entry)it.next();
+			query+=actual.getKey()+" = '"+actual.getValue()+"' and ";
+		}
+		
+		query = query.substring(0,query.length()-5);
+		
 		if(Config.verboseMode) {
 			System.out.println(query);
 		}
