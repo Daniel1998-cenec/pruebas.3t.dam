@@ -59,7 +59,7 @@ public abstract class DAO {
 		}
 	}
 
-	public static int insert(String table, HashMap<String, String> campos) throws SQLException {
+	public static int insert(String table, HashMap<String, Object> campos) throws SQLException {
 		Statement querier = connect();
 		String query = "insert into " + table + " (";
 		Iterator it = campos.keySet().iterator();
@@ -72,8 +72,12 @@ public abstract class DAO {
 
 		Iterator itv = campos.values().iterator();
 		while (itv.hasNext()) {
-			String clave = (String) itv.next();
-			query += "'" + clave + "',";
+			Object elemento = itv.next();
+			if (elemento.getClass() != String.class && elemento.getClass() != Character.class) {
+				query += elemento + ",";
+			} else {
+				query += "'" + elemento + "',";
+			}
 		}
 
 		query = query.substring(0, query.length() - 1) + ")";
@@ -86,14 +90,18 @@ public abstract class DAO {
 		return ret;
 	}
 
-	public static int delete(String table, HashMap<String, String> campos) throws SQLException {
+	public static int delete(String table, HashMap<String, Object> campos) throws SQLException {
 		Statement querier = connect();
 
 		String query = "delete from " + table + " where ";
 		Iterator it = campos.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry actual = (Entry) it.next();
-			query += actual.getKey() + " = '" + actual.getValue() + "' and ";
+			if (actual.getValue().getClass() != String.class && actual.getValue().getClass() != Character.class) {
+				query += actual.getKey() + " = " + actual.getValue() + " and ";
+			} else {
+				query += actual.getKey() + " = '" + actual.getValue() + "' and ";
+			}
 		}
 
 		query = query.substring(0, query.length() - 5);
@@ -123,36 +131,40 @@ public abstract class DAO {
 		}
 	}
 
-	public static ArrayList<Object> consultar(String tabla, 
-		LinkedHashSet<String> columnasSelect,
-		HashMap<String, String> restricciones) throws SQLException {
+	public static ArrayList<Object> consultar(String tabla, LinkedHashSet<String> columnasSelect,
+			HashMap<String, Object> restricciones) throws SQLException {
 		Statement smt = connect();
 		String query = "select ";
 		Iterator ith = columnasSelect.iterator();
+
 		while (ith.hasNext()) {
 			query += (String) ith.next() + ",";
 		}
-		query=query.substring(0,query.length()-1)+" from "+tabla+
-				(restricciones.size()>0?" where ":"");
+		query = query.substring(0, query.length() - 1) + " from " + tabla + (restricciones.size() > 0 ? " where " : "");
 		// Select email, nombre, pass from cliente where
-		Iterator itm=restricciones.entrySet().iterator();
+		Iterator itm = restricciones.entrySet().iterator();
+
 		while (itm.hasNext()) {
 			Entry actual = (Entry) itm.next();
-			query += actual.getKey() + " = '" + actual.getValue() + "' and ";
+			if (actual.getValue().getClass() != String.class && actual.getValue().getClass() != Character.class) {
+				query += actual.getKey() + " = " + actual.getValue() + " and ";
+			} else {
+				query += actual.getKey() + " = '" + actual.getValue() + "' and ";
+			}
 		}
-		if(restricciones.size()>0) {
-			query=query.substring(0,query.length()-5);
+		if (restricciones.size() > 0) {
+			query = query.substring(0, query.length() - 5);
 		}
 		System.out.println(query);
 		ResultSet cursor = smt.executeQuery(query);
 		ArrayList<Object> fila = new ArrayList<Object>();
 		while (cursor.next()) {
-			Iterator hsCols=columnasSelect.iterator();
-			while(hsCols.hasNext()) {
-				String nombreCol=(String)hsCols.next();
+			Iterator hsCols = columnasSelect.iterator();
+			while (hsCols.hasNext()) {
+				String nombreCol = (String) hsCols.next();
 				try {
-					fila.add(cursor.getInt(cursor.findColumn(nombreCol)));	
-				} catch(NumberFormatException | SQLException e) {
+					fila.add(cursor.getInt(cursor.findColumn(nombreCol)));
+				} catch (NumberFormatException | SQLException e) {
 					fila.add(cursor.getString(cursor.findColumn(nombreCol)));
 				}
 			}
@@ -160,5 +172,36 @@ public abstract class DAO {
 		}
 		disconnect(smt);
 		return fila;
+	}
+
+	public static int actualizar(String tabla, HashMap<String, Object> datosAModificar,
+			HashMap<String, Object> restricciones) throws SQLException {
+		String query = "update " + tabla + " set ";
+		Iterator itm = datosAModificar.entrySet().iterator();
+		while (itm.hasNext()) {
+			Entry actual = (Entry) itm.next();
+			if (actual.getValue().getClass() != String.class && actual.getValue().getClass() != Character.class) {
+				query += actual.getKey() + " = " + actual.getValue() + ",";
+			} else {
+				query += actual.getKey() + " = '" + actual.getValue() + "',";
+			}
+		}
+		query = query.substring(0, query.length() - 1) + " where ";
+		Iterator itr = restricciones.entrySet().iterator();
+		while (itr.hasNext()) {
+			Entry actual = (Entry) itr.next();
+			if (actual.getValue().getClass() != String.class && actual.getValue().getClass() != Character.class) {
+				query += actual.getKey() + " = " + actual.getValue() + " and ";
+			} else {
+				query += actual.getKey() + " = '" + actual.getValue() + "' and ";
+			}
+		}
+		query=query.substring(0,query.length()-5);
+		
+		Statement smt=connect();
+		int ret=smt.executeUpdate(query);
+		disconnect(smt);
+		
+		return ret;
 	}
 }
