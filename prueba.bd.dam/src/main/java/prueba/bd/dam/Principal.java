@@ -72,7 +72,7 @@ public class Principal {
 				columnasSacar.add("nick");
 				HashMap<String,String> restricciones= new HashMap<String,String>();
 				ArrayList<Object> cliente=
-						DAO.consultar("cliente", columnasSacar, restricciones);
+						DAO.consultar("user", columnasSacar, restricciones);
 				for(byte i=0;i<cliente.size();i++) {
 					System.out.println(cliente.get(i)+" : ");
 				}
