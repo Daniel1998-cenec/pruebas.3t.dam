@@ -1,14 +1,21 @@
 package prueba.bd.dam;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Scanner;
 
 import utils.DAO;
 
 public class Principal {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		Scanner sc = new Scanner(System.in);
 		// Pon en el menu una opcion 5 - borrar mascota, y usa la funcion dlete de DAO
 		// que ya tenemos hecha para, pidiendo por teclado el nombre de la mascota
@@ -59,7 +66,17 @@ public class Principal {
 
 				break;
 			case 4:
-
+				LinkedHashSet columnasSacar=new LinkedHashSet<String>();
+				columnasSacar.add("email");
+				columnasSacar.add("pass");
+				columnasSacar.add("nick");
+				HashMap<String,String> restricciones= new HashMap<String,String>();
+				ArrayList<Object> cliente=
+						DAO.consultar("cliente", columnasSacar, restricciones);
+				for(byte i=0;i<cliente.size();i++) {
+					System.out.println(cliente.get(i)+" : ");
+				}
+				System.out.println();
 				break;
 
 			case 5:
