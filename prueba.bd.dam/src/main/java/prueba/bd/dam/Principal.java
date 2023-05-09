@@ -11,16 +11,18 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 
+import interfaces.Ventana;
 import utils.DAO;
 
 public class Principal {
 
 	public static void main(String[] args) throws SQLException {
-		Scanner sc = new Scanner(System.in);
+		/*Scanner sc = new Scanner(System.in);
 		// Pon en el menu una opcion 5 - borrar mascota, y usa la funcion dlete de DAO
 		// que ya tenemos hecha para, pidiendo por teclado el nombre de la mascota
 		// y el email del dueño, te borre a la mascota de la tabla pets.
-		// Probadlo de forma que logreis dspues borrar a pueba@prueba.es
+		// Probadlo de forma que logreis dspues borrar a pueba@prueba.es´
+		
 		byte opcion = 0;
 		do {
 			System.out.println("¿Qué quieres hacer en la bd?\n\t0- Salir" + "\n\t1- Insertar usuario"
@@ -120,7 +122,9 @@ public class Principal {
 				}
 				break;
 			}
-		} while (opcion != 0);
+		} while (opcion != 0);*/
+		
+		Ventana v=new Ventana();
 
 	}
 
