@@ -2,8 +2,12 @@ package interfaces;
 
 import javax.swing.JFrame;
 
+import clases.Usuario;
+
 public class Ventana extends JFrame {
 
+	protected Usuario usuarioLogado;
+	
 	public Ventana() {
 		this.setSize(600,500);
 		this.setTitle("Programa de prueba de clase");
@@ -21,7 +25,9 @@ public class Ventana extends JFrame {
 		if(clase.equals(PantallaRegistro.class)) {
 			this.setContentPane(new PantallaRegistro(this));
 		}
-		
+		if(clase.equals(PantallaListado.class)) {
+			this.setContentPane(new PantallaListado(this));
+		}
 		this.getContentPane().setVisible(true);
 	}
 	
