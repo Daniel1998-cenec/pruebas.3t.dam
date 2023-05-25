@@ -2,6 +2,8 @@ package interfaces;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
@@ -13,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
@@ -23,6 +26,9 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -34,14 +40,16 @@ import javax.swing.JFrame;
 import java.awt.Rectangle;
 import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.DropMode;
 import javax.swing.BoxLayout;
 import javax.swing.JPasswordField;
+import javax.swing.ImageIcon;
 
-public class PantallaLogin extends JPanel {
+public class PantallaLogin extends JPanel extends PanelMadre {
 	private JTextField textBienvenido;
 	private JTextField textLogin;
 	private JPasswordField passwordField;
@@ -135,6 +143,19 @@ public class PantallaLogin extends JPanel {
 		BotonPass.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		BotonPass.setBounds(50, 229, 169, 25);
 		add(BotonPass);
+		
+		JLabel labelImagen = new JLabel("");
+		labelImagen.setBounds(90, 224, 747, 159);
+		try {
+			BufferedImage imagen=ImageIO.read(new File(".\\imagenes\\fotoclase.jpg"));
+			Image enIcono=imagen.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
+			labelImagen.setIcon(new ImageIcon(enIcono));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		add(labelImagen);
 	}
 
 	private static void addPopup(Component component, final JPopupMenu popup) {
