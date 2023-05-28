@@ -49,7 +49,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 
-public class PantallaLogin extends JPanel extends PanelMadre {
+public class PantallaLogin extends JPanel {
 	private JTextField textBienvenido;
 	private JTextField textLogin;
 	private JPasswordField passwordField;
